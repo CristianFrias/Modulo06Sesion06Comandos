@@ -1,6 +1,10 @@
+// DEPENDENCIA QUE NOS PERMITE TENER CARACTERES UNICOS
 const { v4: uuidv4 } = require('uuid');
+// PARA LA CREACION DE COMANDOS
 const yargs = require("yargs")
+// COLORES DENTRO DE LA CONSOLA
 const clc = require("cli-color");
+// LEERY ESCRIBIR ARCHIVOS
 const { readFileSync, writeFileSync } = require("fs")
 
 yargs
@@ -27,7 +31,7 @@ yargs
         }
     )
     // FIN COMANDO SALUDAR
-    // CREAR
+    // INICIO COMANDO CREAR
     .command(
         "crear",
         "Comando para registrar personas",
@@ -77,7 +81,6 @@ yargs
                 
             }
 
-
             contentJS.push(persona)
 
             writeFileSync(`${__dirname}/files/personas.txt`,JSON.stringify(contentJS),"utf-8")
@@ -86,14 +89,15 @@ yargs
             
         }
     )
-    // LISTAR
+    // FIN COMANDO CREAR
+    // INICIO COMANDO LISTAR
     .command(
         "listar",
         "Comando para mostrar la lista de personas registradas",
         {},
         () => {
             const contentString = readFileSync(`${__dirname}/files/personas.txt`, "utf-8")
-            const contentJS = JSON.parse(contentString)
+            const contentJS = JSON.parse(contentString) // pasa de json a string
             contentJS.sort((a, b) => Number(a.rut_numero) - Number(b.rut_numero))
             // ESPECIFICAMOS LOS ELEMENTOS QUE QUEREMOS A MOSTRAR
             const response = contentJS.map( item => {
@@ -106,6 +110,77 @@ yargs
             })
             console.table(response)
             
+        }
+    )
+    // FIN COMANDO LISTAR
+
+    // JUEVES 17 DE OCTUBRE
+    // INICIO COMANDO MODIFICAR
+    .command(
+        "modificar",
+        "Comando utilizado para modificar los datos de una persona registrada",
+        {
+            // EN ESTE CASO ID ES EL UNICO TRUE POR QUE ES EL UNICO QUE PEDIRÁ
+            id: {
+                alias: "i",
+                describe: "Identificación única de la persona a modificar",
+                demandOption: true,
+                type: "string"
+            },
+            rut_dv: {
+                alias: "rd",
+                describe: "Dígito verificador del RUT de la persona a registrar",
+                demandOption: false,
+                type: "string"
+            },
+            rut_numero: {
+                alias: "rn",
+                describe: "Parte numérica del RUT de la persona a registrar",
+                demandOption: false,
+                type: "number"
+            },
+            nombre: {
+                alias: "n",
+                describe: "Nombre para el saludo",
+                demandOption: false,
+                type: "string"
+            },
+            apellido: {
+                alias: "a",
+                describe: "Apellido para el saludo",
+                demandOption: false,
+                type: "string"
+            }
+        },
+        ({id, rut_dv, rut_numero, nombre, apellido}) => {
+            console.table({id, rut_dv, rut_numero, nombre, apellido});
+            // VALIDACION
+            if(rut_dv == undefined && rut_numero == undefined && nombre == undefined && apellido == undefined){
+                return console.table(clc.yellow("Por favor enviar al menos un atributo a modificar"))
+            }
+
+            const contentString = readFileSync(`${__dirname}/files/personas.txt`, "utf-8");
+            const contentJS = JSON.parse(contentString);
+         
+            const busqueda = contentJS.find( item => item.id == id)
+
+            if(busqueda == undefined) {
+                return console.log(clc.red("ID de persona no registrada, por favor corregir"));
+                
+            }
+
+            // TERNARIO
+            busqueda.nombre = nombre != undefined ? nombre : busqueda.nombre
+            busqueda.apellido = apellido != undefined ? apellido : busqueda.apellido
+            busqueda.rut_dv = rut_dv != undefined ? rut_dv : busqueda.rut_dv
+            busqueda.rut_numero = rut_numero != undefined ? rut_numero : busqueda.rut_numero
+            // busqueda.rut_dv &&= rut_dv;
+            // busqueda.rut_numero &&= rut_numero;
+
+            writeFileSync(`${__dirname}/files/personas.txt`, JSON.stringify(contentJS), "utf-8")
+
+            // console.log(contentJS);
+            console.log(clc.green("Persona modificada con éxito"))
         }
     )
     .help().argv
