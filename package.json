@@ -1,0 +1,18 @@
+{
+  "name": "modulo06sesion06comandos",
+  "version": "1.0.0",
+  "description": "Node.js por Línea de Comandos",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Cristián Frías",
+  "license": "ISC",
+  "dependencies": {
+    "cli-color": "^2.0.4",
+    "uuidv4": "^6.2.13",
+    "yargs": "^17.7.2"
+  }
+}

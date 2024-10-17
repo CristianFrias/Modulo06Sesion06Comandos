@@ -1,0 +1,1 @@
+[{"id":"f9ab8cb3-90fa-4df6-b6ba-4601c9afbdfc","rut_dv":"6","rut_numero":16659851,"nombre":"Cristián","apellido":"Frías"},{"id":"c7737095-00d8-48a4-8ed1-7a7c3433e71e","rut_dv":"8","rut_numero":14464575,"nombre":"Ivanna","apellido":"Frías"},{"id":"af219257-bdb8-451f-80a6-232e624ac953","rut_dv":"4","rut_numero":6892477,"nombre":"Elena del Carmen","apellido":"García"}]
