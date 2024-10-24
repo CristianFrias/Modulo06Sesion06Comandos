@@ -183,4 +183,31 @@ yargs
             console.log(clc.green("Persona modificada con éxito"))
         }
     )
+    .command(
+        "eliminar",
+        "Comando para eliminar personas registradas",
+        {
+            id: {
+                alias: "i",
+                describe: "ID utilizado como referencia para eliminar una persona",
+                demandOption: true,
+                type: "string"
+            }
+        },
+        ({id}) => {
+            const contentString = readFileSync(`${__dirname}/files/personas.txt`, "utf-8");
+            const contentJS = JSON.parse(contentString);
+
+            const indice = contentJS.findIndex(item => item.id == id)
+
+            if(indice == -1){
+                return console.log(clc.red("Está intentando eliminar una persona con un ID no resgistrado"));
+            }
+
+            contentJS.splice(indice, 1)
+            writeFileSync(`${__dirname}/files/personas.txt`, JSON.stringify(contentJS), "utf-8");
+            console.log(clc.red("Persona eliminada con éxito"));
+            
+        }
+    )
     .help().argv
